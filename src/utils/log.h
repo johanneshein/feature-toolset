@@ -4,15 +4,18 @@
 #include <cstdio> /* FILE */
 #include <sstream> /* std::ostringstream */
 
-enum LogLevel {
+enum LogLevel
+{
     DEBUG = 0,
     INFO = 1,
     WARNING = 2,
     ERROR = 3
 };
 
-class Log {
+class Log
+{
     public:
+
         /**
          * Creates an Log object.
          */
@@ -37,6 +40,7 @@ class Log {
         static std::string toString(LogLevel level);
 
     private:
+
         /**
          * A private copy constructor for access protection issues.
          */

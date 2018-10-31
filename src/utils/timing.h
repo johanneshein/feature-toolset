@@ -6,19 +6,23 @@
 
 typedef int64_t timevalue;
 
-inline timevalue getCurrentTimeInMillis(void) {
+inline timevalue getCurrentTimeInMillis(void)
+{
     struct timespec ts;
-    if (clock_gettime(CLOCK_REALTIME , &ts) == 0) {
+    if (clock_gettime(CLOCK_REALTIME , &ts) == 0)
+    {
         return (timevalue)(ts.tv_sec * 1000 + ts.tv_nsec / 1000000);
     }
-    else {
+    else
+    {
         return -1;
     }
 }
 
 inline std::string getCurrentTimeString(void) {
     struct timespec ts;
-    if (clock_gettime(CLOCK_REALTIME, &ts) == 0) {
+    if (clock_gettime(CLOCK_REALTIME, &ts) == 0)
+    {
         /*
          * struct tm contains all possible time values
          * (seconds, hour, day, year, timezone ...)

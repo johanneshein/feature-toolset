@@ -3,5 +3,5 @@
 
 bool Optional::checkCondition(void)
 {
-        return true;
+    return true;
 }

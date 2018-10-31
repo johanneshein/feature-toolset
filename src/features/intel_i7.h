@@ -5,7 +5,6 @@
 
 class Intel_I7 : public Feature
 {
-
 };
 
 #endif // SDK_FEATURE_TOOLSET_FEATURES_INTEL_I7_H_

@@ -5,7 +5,6 @@
 
 class Mainboard : public Feature
 {
-
 };
 
 #endif // SDK_FEATURE_TOOLSET_FEATURES_MAINBOARD_H_

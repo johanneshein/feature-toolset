@@ -5,8 +5,9 @@
 
 class XOR : public Dependency
 {
-        public:
-                virtual bool checkCondition(void);
+    public:
+
+        virtual bool checkCondition(void);
 };
 
 #endif // SDK_FEATURE_TOOLSET_DEPENDENCIES_XOR_H_

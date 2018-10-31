@@ -87,7 +87,7 @@ TARGET = main
 
 
 # default target called by make without any further parameters
-default: clean rebuild
+default: rebuild
 
 
 
@@ -137,7 +137,6 @@ do_doc:
 
 rebuild: $(TARGET)
 
-# link object files to the target executable
 $(TARGET): $(OBJECTS)
 	$(info )
 	$(info $(MSG_LINKING) $(TARGET))

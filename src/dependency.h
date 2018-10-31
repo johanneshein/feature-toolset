@@ -7,18 +7,20 @@
 
 class Dependency
 {
-  protected:
-    std::list<Feature*> _features;
+    protected:
 
-  public:
-    Dependency();
-    ~Dependency();
+        std::list<Feature*> _features;
 
-    bool addFeature(Feature* f);
-	
-	std::list<Feature*> getFeatures(void);
+    public:
 
-    virtual bool checkCondition(void) = 0;
+        Dependency();
+        ~Dependency();
+
+        bool addFeature(Feature* f);
+
+        std::list<Feature*> getFeatures(void);
+
+        virtual bool checkCondition(void) = 0;
 };
 
 #endif // SDK_FEATURE_TOOLSET_DEPENDENCY_H_

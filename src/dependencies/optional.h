@@ -5,8 +5,9 @@
 
 class Optional : public Dependency
 {
-        public:
-                virtual bool checkCondition(void);
+    public:
+
+        virtual bool checkCondition(void);
 };
 
 #endif // SDK_FEATURE_TOOLSET_DEPENDENCIES_OPTIONAL_H_

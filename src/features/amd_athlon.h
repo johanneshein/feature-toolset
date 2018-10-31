@@ -5,7 +5,6 @@
 
 class AMD_Athlon : public Feature
 {
-
 };
 
 #endif // SDK_FEATURE_TOOLSET_FEATURES_AMD_ATHLON_H_

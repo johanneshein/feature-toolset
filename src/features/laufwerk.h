@@ -5,7 +5,6 @@
 
 class Laufwerk : public Feature
 {
-
 };
 
 #endif // SDK_FEATURE_TOOLSET_FEATURES_LAUFWERK_H_

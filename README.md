@@ -13,7 +13,7 @@ evince - Viewer für ps-Dateien
 2. Alle Quelltext-Dateien in den Ordner kopieren
 3. Dateien kompilieren mit G++
 
-   g++ -std=c++11 -I . main.cpp feature.cpp dependency.cpp analyzer.cpp utils/log.cpp dependencies/mandatory.cpp dependencies/optional.cpp dependencies/or.cpp dependencies/xor.cpp -o main
+g++ -std=c++11 -I . main.cpp feature.cpp dependency.cpp analyzer.cpp utils/log.cpp dependencies/mandatory.cpp dependencies/optional.cpp dependencies/or.cpp dependencies/xor.cpp -o main
 
 # Ausführung
 

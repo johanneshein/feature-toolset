@@ -16,52 +16,52 @@
 
 int main(int argc, char* argv[])
 {
-  Log().Get(INFO) << "START FEATURE TOOLSET";
-  
-  Log().Get(DEBUG) << "Define SPL";
-  
-  PC* pc = new PC();
+    Log().Get(INFO) << "START FEATURE TOOLSET";
 
-  Laufwerk* laufwerke = new Laufwerk();
-  Mainboard* mainboard = new Mainboard();
-  Prozessor* prozessor = new Prozessor();
+    Log().Get(DEBUG) << "Define SPL";
 
-  Intel_I7*   i7     = new Intel_I7();
-  AMD_Athlon* athlon = new AMD_Athlon();
+    PC* pc = new PC();
 
-  Dependency* m1 = new Mandatory();
-  m1->addFeature(laufwerke);
+    Laufwerk* laufwerke = new Laufwerk();
+    Mainboard* mainboard = new Mainboard();
+    Prozessor* prozessor = new Prozessor();
 
-  pc->addDependency(m1);
+    Intel_I7*   i7     = new Intel_I7();
+    AMD_Athlon* athlon = new AMD_Athlon();
 
-  Dependency* m2 = new Mandatory();
-  m2->addFeature(mainboard);
-  m2->addFeature(prozessor);
+    Dependency* m1 = new Mandatory();
+    m1->addFeature(laufwerke);
 
-  pc->addDependency(m2);
+    pc->addDependency(m1);
 
-  Dependency* xor2 = new XOR();
-  xor2->addFeature(i7);
-  xor2->addFeature(athlon);
+    Dependency* m2 = new Mandatory();
+    m2->addFeature(mainboard);
+    m2->addFeature(prozessor);
 
-  prozessor->addDependency(xor2);
+    pc->addDependency(m2);
 
-  Log().Get(DEBUG) << "Load SPL selection";
-  // TODO with libxml++
-  
-  Log().Get(DEBUG) << "Make some SPL selections";
-  // TODO with command line tool
-  pc->select();
-  laufwerke->select();
-  mainboard->select();
-  prozessor->select();
-  
-  Log().Get(DEBUG) << "Storage SPL selection";
-  // TODO with libxml++
-  
-  Log().Get(DEBUG) << "Generate feature model graph";
-  Analyzer::getInstance().generateFeatureModelGraph();
-  Analyzer::getInstance().showFeatureModelGraph();
+    Dependency* xor2 = new XOR();
+    xor2->addFeature(i7);
+    xor2->addFeature(athlon);
 
-  return 0;
+    prozessor->addDependency(xor2);
+
+    Log().Get(DEBUG) << "Load SPL selection";
+    // TODO with libxml++
+
+    Log().Get(DEBUG) << "Make some SPL selections";
+    // TODO with command line tool
+    pc->select();
+    laufwerke->select();
+    mainboard->select();
+    prozessor->select();
+
+    Log().Get(DEBUG) << "Storage SPL selection";
+    // TODO with libxml++
+
+    Log().Get(DEBUG) << "Generate feature model graph";
+    Analyzer::getInstance().generateFeatureModelGraph();
+    Analyzer::getInstance().showFeatureModelGraph();
+
+    return 0;
 }

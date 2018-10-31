@@ -5,7 +5,6 @@
 
 class Prozessor : public Feature
 {
-
 };
 
 #endif // SDK_FEATURE_TOOLSET_FEATURES_PROZESSOR_H_
