@@ -1,0 +1,11 @@
+#ifndef SDK_FEATURE_TOOLSET_FEATURES_AMD_ATHLON_H_
+#define SDK_FEATURE_TOOLSET_FEATURES_AMD_ATHLON_H_
+
+#include "feature.h"
+
+class AMD_Athlon : public Feature
+{
+
+};
+
+#endif // SDK_FEATURE_TOOLSET_FEATURES_AMD_ATHLON_H_
