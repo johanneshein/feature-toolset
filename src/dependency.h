@@ -18,7 +18,7 @@ class Dependency
 
         bool addFeature(Feature* f);
 
-        std::list<Feature*> getFeatures(void);
+        std::list<Feature*>& getFeatures(void);
 
         virtual bool checkCondition(void) = 0;
 };

@@ -30,11 +30,15 @@ Analyzer::~Analyzer()
 bool Analyzer::addFeature(Feature* f)
 {
     _features.push_front(f);
+
+    return true;
 }
 
 bool Analyzer::addDependency(Dependency* d)
 {
     _dependencies.push_front(d);
+
+    return true;
 }
 
 bool Analyzer::checkDependencies(void)
@@ -54,11 +58,15 @@ bool Analyzer::checkDependencies(void)
 
 bool Analyzer::traverseSPLDefinition(std::stringstream& ss, Feature* f)
 {
-    for (auto it=f->getDependencies().begin(); it!=f->getDependencies().end(); ++it)
+    std::list<Dependency*>& dependency_list = f->getDependencies();
+
+    for (auto it=dependency_list.begin(); it!=dependency_list.end(); ++it)
     {
         Dependency* d = *it;
 
-        for (auto it2=d->getFeatures().begin(); it2!=d->getFeatures().end(); ++it2)
+        std::list<Feature*>& feature_list = d->getFeatures();
+
+        for (auto it2=feature_list.begin(); it2!=feature_list.end(); ++it2)
         {
             Feature* dependentFeature = *it2;
 

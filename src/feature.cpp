@@ -39,7 +39,7 @@ void Feature::addDependency(Dependency* d)
     _dependencies.push_front(d);
 }
 
-std::list<Dependency*> Feature::getDependencies(void)
+std::list<Dependency*>& Feature::getDependencies(void)
 {
     return _dependencies;
 }

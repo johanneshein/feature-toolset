@@ -3,7 +3,7 @@
 
 bool Mandatory::checkCondition(void)
 {
-    int count = 0;
+    unsigned int count = 0;
 
     for (auto it=_features.begin(); it!=_features.end(); ++it)
     {

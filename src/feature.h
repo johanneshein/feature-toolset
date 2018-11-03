@@ -23,7 +23,7 @@ class Feature
 
         void addDependency(Dependency* d);
 
-        std::list<Dependency*> getDependencies(void);
+        std::list<Dependency*>& getDependencies(void);
 };
 
 #endif // SDK_FEATURE_TOOLSET_FEATURE_H_

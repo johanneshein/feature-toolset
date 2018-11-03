@@ -4,7 +4,7 @@ git
 g++-Compiler - Version 5.4.0
 cppcheck
 make
-dot
+dot (graphviz)
 evince - Viewer für ps-Dateien
 
 # Kompilierung
