@@ -38,6 +38,7 @@ MSG_DOKU_DONE = make: *** CREATE DOCUMENTATION SUCCESS
 
 MSG_CLEAN_BINARIES = make: *** DELETE BINARIES ...
 MSG_CLEAN_DOCUMENTATION = make: *** DELETE GENERATED DOCUMENTATION ...
+MSG_CLEAN_EXEC = make: *** DELETE GENERATED FILES BY PROGRAM EXECUTION ...
 MSG_CLEAN_DONE = make: *** CLEAN SUCCESS
 
 
@@ -55,12 +56,7 @@ CPP_FLAGS_LINKING += -std=c++11
 CPP_FLAGS_LINKING += -Wall
 #CPP_FLAGS_LINKING += -ggdb
 
-CHANGE_DIR = cd
-
-COPY_FILE = cp
-COPY_DIR = cp -r
-
-DELETE_FILE = rm
+DELETE_FILE = rm -f
 DELETE_DIR = rm -rf
 
 DOXYGEN = doxygen
@@ -87,7 +83,7 @@ TARGET = main
 
 
 # default target called by make without any further parameters
-default: rebuild
+default: checksources rebuild
 
 
 
@@ -97,7 +93,7 @@ all: clean checksources doc rebuild
 
 
 # removes all generated directories and files
-clean: cleanbuild cleandoc
+clean: cleanbuild cleandoc cleanexec
 	$(info )
 	$(info $(MSG_CLEAN_DONE))
 
@@ -111,6 +107,10 @@ cleandoc:
 	$(info $(MSG_CLEAN_DOCUMENTATION))
 	$(DELETE_DIR) $(DIR_DOCUMENTATION)
 
+cleanexec:
+	$(info )
+	$(info $(MSG_CLEAN_EXEC))
+	$(DELETE_FILE) graph.*
 
 
 # executes a static code analysis tool for cpp
