@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+  <name>Feature Toolset C++</name>
+  <features>
+    <feature selected="1">Maus</feature>
+    <feature selected="1">Tastatur</feature>
+    <feature selected="1">HID</feature>
+    <feature selected="1">AMD_Athlon</feature>
+    <feature selected="1">Intel_I</feature>
+    <feature selected="1">Prozessor</feature>
+    <feature selected="1">Mainboard</feature>
+    <feature selected="1">Laufwerk</feature>
+    <feature selected="1">PC</feature>
+  </features>
+</project>

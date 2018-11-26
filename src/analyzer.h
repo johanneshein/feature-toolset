@@ -1,11 +1,12 @@
 #ifndef SDK_FEATURE_TOOLSET_ANALYZER_H_
 #define SDK_FEATURE_TOOLSET_ANALYZER_H_
 
-#include "dependency_fwd.h"
-#include "feature_fwd.h"
+#include "dependency_ptr.h"
+#include "feature_ptr.h"
+#include "selection_handler_ptr.h"
+#include "visualizer_ptr.h"
 
 #include <list>
-#include <sstream> /* std::stringstream */
 
 class Analyzer
 {
@@ -13,20 +14,27 @@ class Analyzer
 
         static Analyzer& getInstance(void);
 
-        bool addFeature(Feature* f);
-        bool addDependency(Dependency* d);
+        bool addFeature(feature_ptr f);
+        bool addDependency(dependency_ptr d);
+
+        std::list<feature_ptr>& getAllDetectedFeatures(void);
+
+        bool loadFeatureSelection(void);
+        bool saveFeatureSelection(void);
 
         bool checkDependencies(void);
 
         bool generateFeatureModelGraph(void);
         bool showFeatureModelGraph(void);
 
-    protected:
-
-        std::list<Feature*> _features;
-        std::list<Dependency*> _dependencies;
-
     private:
+
+        std::list<feature_ptr> _features;
+        std::list<dependency_ptr> _dependencies;
+
+        selection_handler_ptr _selectionHandler;
+
+        visualizer_ptr _visualizer;
 
         /*
          * Since this class is designed as a singleton pattern, the class's
@@ -47,7 +55,9 @@ class Analyzer
         Analyzer(const Analyzer& a);
         void operator=(const Analyzer& a);
 
-        bool traverseSPLDefinition(std::stringstream& ss, Feature* f);
+        bool determineRootFeatures(std::list<feature_ptr>& inputReference);
+
+        void traverseSPLDefinition(bool& plausible, const feature_ptr& f);
 };
 
 #endif // SDK_FEATURE_TOOLSET_ANALYZER_H_

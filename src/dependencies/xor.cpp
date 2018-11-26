@@ -19,3 +19,13 @@ bool XOR::checkCondition(void)
         return false;
     }
 }
+
+std::string XOR::getDotEgdeLabel(void)
+{
+    return "=1";
+}
+
+std::string XOR::getDotArrowType(void)
+{
+    return "none";
+}

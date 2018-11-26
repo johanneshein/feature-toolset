@@ -1,0 +1,19 @@
+digraph G {
+PC [color = "#0000FF"];
+PC -> HID [ arrowhead = "odot"  color = "#0000FF" ];
+HID [color = "#0000FF"];
+HID -> Maus [ arrowhead = "none" label = ">0" color = "#0000FF" ];
+Maus [color = "#0000FF"];
+HID -> Tastatur [ arrowhead = "none" label = ">0" color = "#0000FF" ];
+Tastatur [color = "#0000FF"];
+PC -> Prozessor [ arrowhead = "dot"  color = "#0000FF" ];
+Prozessor [color = "#0000FF"];
+Prozessor -> AMD_Athlon [ arrowhead = "none" label = "=1" color = "#FF00FF" ];
+AMD_Athlon [color = "#FF00FF"];
+Prozessor -> Intel_I [ arrowhead = "none" label = "=1" color = "#FF00FF" ];
+Intel_I [color = "#FF00FF"];
+PC -> Mainboard [ arrowhead = "dot"  color = "#0000FF" ];
+Mainboard [color = "#0000FF"];
+PC -> Laufwerk [ arrowhead = "dot"  color = "#0000FF" ];
+Laufwerk [color = "#0000FF"];
+}

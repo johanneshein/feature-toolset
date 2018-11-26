@@ -6,6 +6,7 @@ cppcheck
 make
 dot (graphviz)
 evince - Viewer für ps-Dateien
+pkg-config
 
 # Kompilierung
 

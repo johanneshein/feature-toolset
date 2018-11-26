@@ -1,12 +1,8 @@
 #include "analyzer.h"
 #include "dependency.h"
 #include "feature.h"
-#include "utils/log.h"
-
-#include <typeinfo> /* typeid() */
-#include <cstdlib> /* system() */
-#include <string> /* std::string */
-#include <fstream> /* std::fstream */
+#include "selection_handler/xml.h"
+#include "visualizer/dot.h"
 
 Analyzer& Analyzer::getInstance(void)
 {
@@ -19,7 +15,9 @@ Analyzer& Analyzer::getInstance(void)
     return _instance;
 }
 
-Analyzer::Analyzer()
+Analyzer::Analyzer() :
+    _selectionHandler(new XMLSelectionHandler("project.xml")),
+    _visualizer(new DotVisualizer("feature_model.gv", "feature_model.ps"))
 {
 }
 
@@ -27,96 +25,147 @@ Analyzer::~Analyzer()
 {
 }
 
-bool Analyzer::addFeature(Feature* f)
+bool Analyzer::addFeature(feature_ptr f)
 {
     _features.push_front(f);
 
     return true;
 }
 
-bool Analyzer::addDependency(Dependency* d)
+bool Analyzer::addDependency(dependency_ptr d)
 {
     _dependencies.push_front(d);
 
     return true;
 }
 
-bool Analyzer::checkDependencies(void)
+std::list<feature_ptr>& Analyzer::getAllDetectedFeatures(void)
 {
-    for (auto it=_dependencies.begin(); it!=_dependencies.end(); ++it)
-    {
-        if (!((*it)->checkCondition()))
-        {
-            return false;
-        }
-    }
-
-    Log().Get(INFO) << "All conditions are met in Analyzer::checkDependencies.";
-
-    return true;
+    return _features;
 }
 
-bool Analyzer::traverseSPLDefinition(std::stringstream& ss, Feature* f)
+bool Analyzer::loadFeatureSelection(void)
 {
-    std::list<Dependency*>& dependency_list = f->getDependencies();
+    return _selectionHandler->loadSelection(_features);
+}
 
-    for (auto it=dependency_list.begin(); it!=dependency_list.end(); ++it)
+bool Analyzer::saveFeatureSelection(void)
+{
+    return _selectionHandler->saveSelection(_features);
+}
+
+bool Analyzer::checkDependencies(void)
+{
+    std::list<feature_ptr> RootFeatures;
+
+    bool Erfolg = determineRootFeatures(RootFeatures);
+
+    if (Erfolg)
     {
-        Dependency* d = *it;
-
-        std::list<Feature*>& feature_list = d->getFeatures();
-
-        for (auto it2=feature_list.begin(); it2!=feature_list.end(); ++it2)
+        for (auto it1=RootFeatures.begin(); it1!=RootFeatures.end(); ++it1)
         {
-            Feature* dependentFeature = *it2;
-
-            ss << typeid(f).name() << " -> " << typeid(dependentFeature).name() << ";\n";
+            traverseSPLDefinition(Erfolg, *it1);
         }
     }
 
-    return true;
+    return Erfolg;
 }
 
 bool Analyzer::generateFeatureModelGraph(void)
 {
-    Log().Get(INFO) << "Generate the feature model graph.";
+    std::list<feature_ptr> RootFeatures;
 
-    bool ok = true;
-    std::stringstream ss;
+    bool Erfolg = determineRootFeatures(RootFeatures);
 
-    ss << "digraph G {\n";
-
-    for (auto it=_features.begin(); it!=_features.end(); ++it)
+    if (Erfolg)
     {
-        ok = traverseSPLDefinition(ss, *it);
+        return _visualizer->generateFeatureModel(RootFeatures);
     }
-
-    ss << "}\n";
-
-    if (ok)
+    else
     {
-        std::fstream* fs = new std::fstream();
-
-        fs->open("graph.gv", std::ios::out | std::ios::trunc);
-
-        if (fs->is_open())
-        {
-            std::string content = ss.str();
-            fs->write(&content[0], content.size());
-            fs->close();
-        }
-
-        delete fs;
-
-        system("dot -Tps graph.gv -o graph.ps");
+        return false;
     }
-
-    return ok;
 }
 
 bool Analyzer::showFeatureModelGraph(void)
 {
-    system("evince graph.ps");
+    return _visualizer->showFeatureModel();
+}
 
-    return false;
+bool Analyzer::determineRootFeatures(std::list<feature_ptr>& inputReference)
+{
+    for (auto it1=_features.begin(); it1!=_features.end(); ++it1)
+    {
+        bool found = true;
+
+        feature_ptr feature = *it1;
+
+        for (auto it2=_dependencies.begin(); it2!=_dependencies.end(); ++it2)
+        {
+            dependency_ptr dep = *it2;
+
+            std::list<feature_ptr>& dependentFeatures = dep->getFeatures();
+
+            for (auto it3=dependentFeatures.begin(); it3!=dependentFeatures.end(); ++it3)
+            {
+                feature_ptr dependentFeature = *it3;
+
+                if (feature->getName().compare(dependentFeature->getName()) == 0)
+                {
+                    found = false;
+                }
+            }
+        }
+
+        if (found)
+        {
+            inputReference.push_front(feature);
+        }
+    }
+
+    if (inputReference.size() > 0)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+void Analyzer::traverseSPLDefinition(bool& plausible, const feature_ptr& f)
+{
+    std::list<dependency_ptr>& featureDependencies = f->getDependencies();
+
+    for (auto it=featureDependencies.begin(); it!=featureDependencies.end(); ++it)
+    {
+        dependency_ptr d = *it;
+
+        if ((f->isSelected()) && !d->checkCondition())
+        {
+            d->markAsProblematic();
+            plausible = false;
+        }
+
+        std::list<feature_ptr>& dependentFeatures = d->getFeatures();
+
+        for (auto it3=dependentFeatures.begin(); it3!=dependentFeatures.end(); ++it3)
+        {
+            feature_ptr dependentFeature = *it3;
+
+            if (((dependentFeature->isSelected()) && (!d->checkCondition())) || ((f->isSelected()) && (!d->checkCondition())))
+            {
+                dependentFeature->markAsProblematic();
+                plausible = false;
+            }
+
+            if ((dependentFeature->isSelected()) && (!f->isSelected()))
+            {
+                f->markAsProblematic();
+                plausible = false;
+            }
+
+            traverseSPLDefinition(plausible, dependentFeature);
+        }
+    }
 }

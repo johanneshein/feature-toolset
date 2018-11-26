@@ -1,23 +1,45 @@
 #include "analyzer.h"
 #include "dependency.h"
 
-Dependency::Dependency()
+Dependency::Dependency() :
+    _plausible(true)
 {
-    Analyzer::getInstance().addDependency(this);
+    /* This is a very clever solution for complex problem. */
+    auto wptr = std::shared_ptr<Dependency>( this, [](Dependency*){} );
+
+    Analyzer::getInstance().addDependency(shared_from_this());
 }
 
 Dependency::~Dependency()
 {
 }
 
-bool Dependency::addFeature(Feature* f)
+bool Dependency::isPlausible(void)
+{
+    return _plausible;
+}
+
+bool Dependency::markAsProblematic(void)
+{
+    if (this->isPlausible())
+    {
+        _plausible = false;
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+bool Dependency::addFeature(feature_ptr f)
 {
     _features.push_front(f);
 
     return true;
 }
 
-std::list<Feature*>& Dependency::getFeatures(void)
+std::list<feature_ptr>& Dependency::getFeatures(void)
 {
     return _features;
 }

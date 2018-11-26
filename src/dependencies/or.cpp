@@ -19,3 +19,13 @@ bool OR::checkCondition(void)
         return false;
     }
 }
+
+std::string OR::getDotEgdeLabel(void)
+{
+    return ">0";
+}
+
+std::string OR::getDotArrowType(void)
+{
+    return "none";
+}

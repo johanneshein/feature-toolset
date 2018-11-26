@@ -19,3 +19,13 @@ bool Mandatory::checkCondition(void)
         return false;
     }
 }
+
+std::string Mandatory::getDotEgdeLabel(void)
+{
+    return "";
+}
+
+std::string Mandatory::getDotArrowType(void)
+{
+    return "dot";
+}

@@ -51,10 +51,15 @@ CPP_FLAGS_COMPILING += -c
 CPP_FLAGS_COMPILING += -std=c++11
 CPP_FLAGS_COMPILING += -Wall
 #CPP_FLAGS_COMPILING += -ggdb
+CPP_FLAGS_COMPILING += $(shell pkg-config libxml++-3.0 --cflags)
 
-CPP_FLAGS_LINKING += -std=c++11
+CPP_FLAGS_DEPENDENCIES = -MMD
+
+CPP_FLAGS_LINKING = -std=c++11
 CPP_FLAGS_LINKING += -Wall
 #CPP_FLAGS_LINKING += -ggdb
+
+CPP_FLAGS_LINKING_LIBS = $(shell pkg-config libxml++-3.0 --libs)
 
 DELETE_FILE = rm -f
 DELETE_DIR = rm -rf
@@ -69,6 +74,7 @@ STATIC_CODE_ANALYSIS_TOOL_FLAGS = --quiet
 # sources and objects excluding tests
 SOURCES = $(shell find $(DIR_SOURCES) -name '*.cpp')
 OBJECTS = $(patsubst $(DIR_SOURCES)%,$(DIR_BINARIES)%,$(patsubst %.cpp,%.o,$(SOURCES:%.cpp=%.o)))
+DEPENDENCIES = $(OBJECTS:.o=.d)
 
 
 
@@ -101,6 +107,7 @@ cleanbuild:
 	$(info )
 	$(info $(MSG_CLEAN_BINARIES))
 	$(DELETE_DIR) $(DIR_BINARIES)
+	$(DELETE_FILE) $(TARGET)
 
 cleandoc:
 	$(info )
@@ -110,7 +117,9 @@ cleandoc:
 cleanexec:
 	$(info )
 	$(info $(MSG_CLEAN_EXEC))
-	$(DELETE_FILE) graph.*
+	$(DELETE_FILE) *.gv
+	$(DELETE_FILE) *.ps
+	$(DELETE_FILE) *.xml
 
 
 # executes a static code analysis tool for cpp
@@ -140,10 +149,12 @@ rebuild: $(TARGET)
 $(TARGET): $(OBJECTS)
 	$(info )
 	$(info $(MSG_LINKING) $(TARGET))
-	$(CPP) $(CPP_FLAGS_LINKING) $(OBJECTS) -o $@
+	$(CPP) $(CPP_FLAGS_LINKING) -o $@ $(OBJECTS) $(CPP_FLAGS_LINKING_LIBS)
 
 $(DIR_BINARIES)%.o: $(DIR_SOURCES)%.cpp
 	$(info )
-	$(info $(MSG_COMPILING) $<)
+	$(info $(MSG_COMPILING) $< ---> $@)
 	@mkdir -p $(@D)
-	$(CPP) $(CPP_FLAGS_COMPILING) $< -o $@
+	$(CPP) $(CPP_FLAGS_COMPILING) $(CPP_FLAGS_DEPENDENCIES) $< -o $@
+
+-include $(DEPENDENCIES)
