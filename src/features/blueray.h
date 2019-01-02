@@ -1,0 +1,10 @@
+#ifndef SDK_FEATURE_TOOLSET_FEATURES_LAUFWERK_BLUERAY_H_
+#define SDK_FEATURE_TOOLSET_FEATURES_LAUFWERK_BLUERAY_H_
+
+#include "feature.h"
+
+class Blueray : public Feature
+{
+};
+
+#endif // SDK_FEATURE_TOOLSET_FEATURES_LAUFWERK_BLUERAY_H_

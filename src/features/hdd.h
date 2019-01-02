@@ -1,0 +1,10 @@
+#ifndef SDK_FEATURE_TOOLSET_FEATURES_LAUFWERK_HDD_H_
+#define SDK_FEATURE_TOOLSET_FEATURES_LAUFWERK_HDD_H_
+
+#include "feature.h"
+
+class HDD : public Feature
+{
+};
+
+#endif // SDK_FEATURE_TOOLSET_FEATURES_LAUFWERK_HDD_H_
